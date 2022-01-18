@@ -9,6 +9,7 @@ use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
+use kartik\nav\NavX;
 
 AppAsset::register($this);
 ?>
@@ -40,6 +41,35 @@ AppAsset::register($this);
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
+        $menuItems[] = [
+            'label' => 'Data Master',
+            'items' => [
+                ['label' => 'Data Tarif', 'url' => ['/tarif/index']],
+                ['label' => 'Data Pelanggan', 'url' => ['/pelanggan/index']],
+                [
+                    'label' => 'Data User',
+                    'items' => [
+                        ['label' => 'Data Petugas', 'url' => ['/petugas/index']],
+                        ['label' => 'Data Agen', 'url' => ['/agen/index']],
+                    ],
+                ],
+            ],
+        ];
+        $menuItems[] = [
+            'label' => 'Data Transaksi',
+            'items' => [
+                ['label' => 'Data Penggunaan', 'url' => ['/penggunaan/index']],
+                ['label' => 'Data Tagihan', 'url' => ['/tagihan/index']],
+                ['label' => 'Data Pembayaran', 'url' => ['/pembayaran/index']],
+            ],
+        ];
+        $menuItems[] = [
+            'label' => 'Data User',
+            'items' => [
+                ['label' => 'Data Petugas', 'url' => ['/petugas/index']],
+                ['label' => 'Data Agen', 'url' => ['/agen/index']],
+            ],
+        ];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
             . Html::submitButton(
@@ -49,9 +79,11 @@ AppAsset::register($this);
             . Html::endForm()
             . '</li>';
     }
-    echo Nav::widget([
+    echo NavX::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => $menuItems,
+        'activateParents' => true,
+        'encodeLabels' => false
     ]);
     NavBar::end();
     ?>
