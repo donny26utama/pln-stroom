@@ -42,7 +42,7 @@ class Penggunaan extends \yii\db\ActiveRecord
             [['tahun', 'tgl_cek'], 'safe'],
             [['kode'], 'string', 'max' => 20],
             [['bulan'], 'string', 'max' => 2],
-            [['meter_akhir'], 'validateMeterAkhir'],
+            [['meter_akhir'], 'validateMeterAkhir', 'on' => 'update'],
         ];
     }
 
@@ -91,13 +91,12 @@ class Penggunaan extends \yii\db\ActiveRecord
             ]);
             $model->petugas_id = Yii::$app->user->id;
             $model->save();
-            // die(var_dump($model->getErrors()));
 
             $period = date('Y-m-d', strtotime(sprintf('%s-%s-01', $this->tahun, $this->bulan) . ' +1 month'));
 
             $model = new Penggunaan();
-            $model->kode = $this->kode . date('mY', strtotime($period));
-            $model->pelanggan_id = $this->id;
+            $model->kode = date('YmdHis') . date('mY', strtotime($period));
+            $model->pelanggan_id = $this->pelanggan_id;
             $model->bulan = date('m', strtotime($period));
             $model->tahun = date('Y', strtotime($period));
             $model->meter_awal = $this->meter_akhir;

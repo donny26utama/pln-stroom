@@ -79,7 +79,7 @@ class PembayaranController extends Controller
         $model->setDefaultValues();
 
         if (isset($filter['search'])) {
-            $pelanggan = Pelanggan::find(['OR', ['kode' => $filter['search']], ['no_meter' => $filter['search']]])->one();
+            $pelanggan = Pelanggan::find()->where(['OR', ['kode' => $filter['search']], ['no_meter' => $filter['search']]])->one();
             if ($pelanggan) {
                 $tagihan = Tagihan::find()->where(['pelanggan_id' => $pelanggan->id, 'status' => 0])->all();
             }
