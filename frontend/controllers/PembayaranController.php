@@ -1,18 +1,21 @@
 <?php
 
-namespace backend\controllers;
+namespace frontend\controllers;
 
-use Yii;
+use common\models\Agen;
 use common\models\Pelanggan;
-use common\models\PelangganSearch;
+use common\models\Tagihan;
+use common\models\Pembayaran;
+use common\models\PembayaranSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PelangganController implements the CRUD actions for Pelanggan model.
+ * PembayaranController implements the CRUD actions for Pembayaran model.
  */
-class PelangganController extends Controller
+class PembayaranController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,13 +36,13 @@ class PelangganController extends Controller
     }
 
     /**
-     * Lists all Pelanggan models.
+     * Lists all Pembayaran models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new PelangganSearch();
+        $searchModel = new PembayaranSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -49,7 +52,7 @@ class PelangganController extends Controller
     }
 
     /**
-     * Displays a single Pelanggan model.
+     * Displays a single Pembayaran model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -62,30 +65,42 @@ class PelangganController extends Controller
     }
 
     /**
-     * Creates a new Pelanggan model.
+     * Creates a new Pembayaran model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Pelanggan();
+        $model = new Pembayaran();
+        $pelanggan = null;
+        $tagihan = null;
+        $filter = $this->request->queryParams;
+        $model->agen_id = Yii::$app->user->id;
         $model->setDefaultValues();
+
+        if (isset($filter['search'])) {
+            $pelanggan = Pelanggan::find(['OR', ['kode' => $filter['search']], ['no_meter' => $filter['search']]])->one();
+            if ($pelanggan) {
+                $tagihan = Tagihan::find()->where(['pelanggan_id' => $pelanggan->id, 'status' => 0])->all();
+            }
+        }
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('pelanggan', 'Data Pelanggan Berhasil Ditambahkan');
-
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
         return $this->render('create', [
             'model' => $model,
+            'filter' => $filter,
+            'pelanggan' => $pelanggan,
+            'tagihan' => $tagihan,
         ]);
     }
 
     /**
-     * Updates an existing Pelanggan model.
+     * Updates an existing Pembayaran model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -96,7 +111,7 @@ class PelangganController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->uuid]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -105,7 +120,7 @@ class PelangganController extends Controller
     }
 
     /**
-     * Deletes an existing Pelanggan model.
+     * Deletes an existing Pembayaran model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -119,15 +134,15 @@ class PelangganController extends Controller
     }
 
     /**
-     * Finds the Pelanggan model based on its primary key value.
+     * Finds the Pembayaran model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Pelanggan the loaded model
+     * @return Pembayaran the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Pelanggan::findOne(['uuid' => $id])) !== null) {
+        if (($model = Pembayaran::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

@@ -7,8 +7,8 @@ use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
-use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
+use kartik\nav\NavX;
 
 AppAsset::register($this);
 ?>
@@ -34,16 +34,26 @@ AppAsset::register($this);
             'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
         ],
     ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
+
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems = [];
+        $rigthMenuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $rigthMenuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = '<li>'
+        $menuItems = [
+            [
+                'label' => 'Transaksi',
+                'items' => [
+                    ['label' => 'Pembayaran', 'url' => ['/pembayaran/create']],
+                    ['label' => 'Riwayat Pembayaran', 'url' => ['/pembayaran/index']],
+                ],
+            ],
+            [
+                'label' => 'Laporan',
+                'url' => ['/laporan/pembayaran'],
+            ],
+        ];
+        $rigthMenuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
@@ -52,9 +62,14 @@ AppAsset::register($this);
             . Html::endForm()
             . '</li>';
     }
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav ml-auto'],
+
+    echo NavX::widget([
+        'options' => ['class' => 'navbar-nav mr-auto'],
         'items' => $menuItems,
+    ]);
+    echo NavX::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => $rigthMenuItems,
     ]);
     NavBar::end();
     ?>

@@ -2,17 +2,18 @@
 
 namespace backend\controllers;
 
-use Yii;
 use common\models\Pelanggan;
-use common\models\PelangganSearch;
+use common\models\Penggunaan;
+use common\models\PenggunaanSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PelangganController implements the CRUD actions for Pelanggan model.
+ * PenggunaanController implements the CRUD actions for Penggunaan model.
  */
-class PelangganController extends Controller
+class PenggunaanController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,13 +34,13 @@ class PelangganController extends Controller
     }
 
     /**
-     * Lists all Pelanggan models.
+     * Lists all Penggunaan models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new PelangganSearch();
+        $searchModel = new PenggunaanSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -49,7 +50,7 @@ class PelangganController extends Controller
     }
 
     /**
-     * Displays a single Pelanggan model.
+     * Displays a single Penggunaan model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -62,50 +63,63 @@ class PelangganController extends Controller
     }
 
     /**
-     * Creates a new Pelanggan model.
+     * Creates a new Penggunaan model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Pelanggan();
-        $model->setDefaultValues();
+        $model = new Penggunaan();
+        $filter = $this->request->queryParams;
+
+        if (isset($filter['search'])) {
+            $pelanggan = Pelanggan::find(['OR', ['kode' => $filter['search']], ['no_meter' => $filter['search']]])->one();
+            if ($pelanggan) {
+                $penggunaan = Penggunaan::findOne(['pelanggan_id' => $pelanggan->id, 'meter_akhir' => 0]);
+                $model = $penggunaan ?: new Penggunaan();
+            }
+        }
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('pelanggan', 'Data Pelanggan Berhasil Ditambahkan');
+            $model->petugas_id = Yii::$app->user->identity->id;
 
+            if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+        } else {
+            $model->setDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
+            'filter' => $filter,
         ]);
     }
 
     /**
-     * Updates an existing Pelanggan model.
+     * Updates an existing Penggunaan model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id = null)
     {
         $model = $this->findModel($id);
+        $filter = $this->request->queryParams;
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->uuid]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'filter' => $filter,
         ]);
     }
 
     /**
-     * Deletes an existing Pelanggan model.
+     * Deletes an existing Penggunaan model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -119,15 +133,15 @@ class PelangganController extends Controller
     }
 
     /**
-     * Finds the Pelanggan model based on its primary key value.
+     * Finds the Penggunaan model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Pelanggan the loaded model
+     * @return Penggunaan the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Pelanggan::findOne(['uuid' => $id])) !== null) {
+        if (($model = Penggunaan::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

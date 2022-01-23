@@ -7,7 +7,6 @@ use backend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
-use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use kartik\nav\NavX;
 
@@ -20,7 +19,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= trim(Html::encode($this->title)) ?> | PT PLN (Persero)</title>
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
@@ -60,25 +59,32 @@ AppAsset::register($this);
             'items' => [
                 ['label' => 'Data Penggunaan', 'url' => ['/penggunaan/index']],
                 ['label' => 'Data Tagihan', 'url' => ['/tagihan/index']],
-                ['label' => 'Data Pembayaran', 'url' => ['/pembayaran/index']],
             ],
         ];
         $menuItems[] = [
-            'label' => 'Data User',
+            'label' => 'Laporan',
             'items' => [
-                ['label' => 'Data Petugas', 'url' => ['/petugas/index']],
-                ['label' => 'Data Agen', 'url' => ['/agen/index']],
+                ['label' => 'Data Tarif', 'url' => ['/laporan/tarif']],
+                ['label' => 'Data Pelanggan', 'url' => ['/laporan/pelanggan']],
+                ['label' => 'Data Agen', 'url' => ['/laporan/agen']],
             ],
         ];
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
     }
+    echo NavX::widget([
+        'options' => ['class' => 'navbar-nav mr-auto'],
+        'items' => $menuItems,
+        'activateParents' => true,
+        'encodeLabels' => false
+    ]);
+    $menuItems = [];
+    $menuItems[] = '<li>'
+        . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
+        . Html::submitButton(
+            'Logout (' . Yii::$app->user->identity->username . ')',
+            ['class' => 'btn btn-link logout']
+        )
+        . Html::endForm()
+        . '</li>';
     echo NavX::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => $menuItems,

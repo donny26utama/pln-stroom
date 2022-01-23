@@ -2,17 +2,16 @@
 
 namespace backend\controllers;
 
-use Yii;
-use common\models\Pelanggan;
-use common\models\PelangganSearch;
+use common\models\Tagihan;
+use common\models\TagihanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PelangganController implements the CRUD actions for Pelanggan model.
+ * TagihanController implements the CRUD actions for Tagihan model.
  */
-class PelangganController extends Controller
+class TagihanController extends Controller
 {
     /**
      * @inheritDoc
@@ -23,7 +22,7 @@ class PelangganController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::class,
+                    'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -33,13 +32,13 @@ class PelangganController extends Controller
     }
 
     /**
-     * Lists all Pelanggan models.
+     * Lists all Tagihan models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new PelangganSearch();
+        $searchModel = new TagihanSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -49,7 +48,7 @@ class PelangganController extends Controller
     }
 
     /**
-     * Displays a single Pelanggan model.
+     * Displays a single Tagihan model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -62,21 +61,20 @@ class PelangganController extends Controller
     }
 
     /**
-     * Creates a new Pelanggan model.
+     * Creates a new Tagihan model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Pelanggan();
-        $model->setDefaultValues();
+        $model = new Tagihan();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('pelanggan', 'Data Pelanggan Berhasil Ditambahkan');
-
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -85,7 +83,7 @@ class PelangganController extends Controller
     }
 
     /**
-     * Updates an existing Pelanggan model.
+     * Updates an existing Tagihan model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -96,7 +94,7 @@ class PelangganController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->uuid]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -105,7 +103,7 @@ class PelangganController extends Controller
     }
 
     /**
-     * Deletes an existing Pelanggan model.
+     * Deletes an existing Tagihan model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -119,15 +117,15 @@ class PelangganController extends Controller
     }
 
     /**
-     * Finds the Pelanggan model based on its primary key value.
+     * Finds the Tagihan model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Pelanggan the loaded model
+     * @return Tagihan the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Pelanggan::findOne(['uuid' => $id])) !== null) {
+        if (($model = Tagihan::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
