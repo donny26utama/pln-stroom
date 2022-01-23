@@ -7,8 +7,8 @@ use backend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
-use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
+use kartik\nav\NavX;
 
 AppAsset::register($this);
 ?>
@@ -19,7 +19,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= trim(Html::encode($this->title)) ?> | PT PLN (Persero)</title>
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
@@ -40,18 +40,56 @@ AppAsset::register($this);
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
+        $menuItems[] = [
+            'label' => 'Data Master',
+            'items' => [
+                ['label' => 'Data Tarif', 'url' => ['/tarif/index']],
+                ['label' => 'Data Pelanggan', 'url' => ['/pelanggan/index']],
+                [
+                    'label' => 'Data User',
+                    'items' => [
+                        ['label' => 'Data Petugas', 'url' => ['/petugas/index']],
+                        ['label' => 'Data Agen', 'url' => ['/agen/index']],
+                    ],
+                ],
+            ],
+        ];
+        $menuItems[] = [
+            'label' => 'Data Transaksi',
+            'items' => [
+                ['label' => 'Data Penggunaan', 'url' => ['/penggunaan/index']],
+                ['label' => 'Data Tagihan', 'url' => ['/tagihan/index']],
+            ],
+        ];
+        $menuItems[] = [
+            'label' => 'Laporan',
+            'items' => [
+                ['label' => 'Data Tarif', 'url' => ['/laporan/tarif']],
+                ['label' => 'Data Pelanggan', 'url' => ['/laporan/pelanggan']],
+                ['label' => 'Data Agen', 'url' => ['/laporan/agen']],
+            ],
+        ];
     }
-    echo Nav::widget([
+    echo NavX::widget([
+        'options' => ['class' => 'navbar-nav mr-auto'],
+        'items' => $menuItems,
+        'activateParents' => true,
+        'encodeLabels' => false
+    ]);
+    $menuItems = [];
+    $menuItems[] = '<li>'
+        . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
+        . Html::submitButton(
+            'Logout (' . Yii::$app->user->identity->username . ')',
+            ['class' => 'btn btn-link logout']
+        )
+        . Html::endForm()
+        . '</li>';
+    echo NavX::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => $menuItems,
+        'activateParents' => true,
+        'encodeLabels' => false
     ]);
     NavBar::end();
     ?>
