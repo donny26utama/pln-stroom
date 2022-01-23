@@ -73,9 +73,10 @@ class PelangganController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                $model->refresh();
                 Yii::$app->session->setFlash('pelanggan', 'Data Pelanggan Berhasil Ditambahkan');
 
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->uuid]);
             }
         }
 
