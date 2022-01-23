@@ -73,7 +73,7 @@ class PenggunaanController extends Controller
         $filter = $this->request->queryParams;
 
         if (isset($filter['search'])) {
-            $pelanggan = Pelanggan::find(['OR', ['kode' => $filter['search']], ['no_meter' => $filter['search']]])->one();
+            $pelanggan = Pelanggan::find()->where(['OR', ['kode' => $filter['search']], ['no_meter' => $filter['search']]])->one();
             if ($pelanggan) {
                 $penggunaan = Penggunaan::findOne(['pelanggan_id' => $pelanggan->id, 'meter_akhir' => 0]);
                 $model = $penggunaan ?: new Penggunaan();
