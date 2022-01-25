@@ -8,16 +8,20 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Update Tarif: {name}', [
     'name' => $model->id,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tarifs'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tarif'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => sprintf('%s-%s', $model->golongan, $model->daya), 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Edit');
 ?>
-<div class="tarif-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+<div class="tarif-update col-12 col-md-6 offset-md-3">
+    <div class="card bg-light">
+        <div class="card-header">
+            Tarif Baru
+        </div>
+        <div class="card-body">
+            <?= $this->render('_form', [
+                'model' => $model,
+            ]) ?>
+        </div>
+    </div>
 </div>

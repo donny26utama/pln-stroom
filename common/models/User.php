@@ -34,6 +34,12 @@ class User extends ActiveRecord implements IdentityInterface
     const ROLE_PETUGAS = 'petugas';
     const ROLE_AGEN = 'agen';
 
+    const JK_PRIA = 'pria';
+    const JK_WANITA = 'wanita';
+
+    public $password;
+    public $c_password;
+
     /**
      * {@inheritdoc}
      */
@@ -71,9 +77,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'nama' => Yii::t('app', 'Nama Lengkap'),
+            'no_telepon' => Yii::t('app', 'No Telp'),
+            'alamat' => Yii::t('app', 'Alamat'),
+            'jenis_kelamin' => Yii::t('app', 'Jenis Kelamin'),
             'username' => Yii::t('app', 'Username'),
             'auth_key' => Yii::t('app', 'Auth Key'),
-            'password_hash' => Yii::t('app', 'Password Hash'),
+            'password_hash' => Yii::t('app', 'Password'),
             'password_reset_token' => Yii::t('app', 'Password Reset Token'),
             'email' => Yii::t('app', 'Email'),
             'status' => Yii::t('app', 'Status'),
@@ -81,6 +91,8 @@ class User extends ActiveRecord implements IdentityInterface
             'updated_at' => Yii::t('app', 'Updated At'),
             'verification_token' => Yii::t('app', 'Verification Token'),
             'role' => Yii::t('app', 'Role'),
+            'password' => Yii::t('app', 'Password'),
+            'c_password' => Yii::t('app', 'Konfirmasi Password'),
         ];
     }
 

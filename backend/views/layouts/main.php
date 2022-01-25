@@ -34,60 +34,61 @@ AppAsset::register($this);
             'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
         ],
     ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-    ];
+
+    $leftMenuItems = [];
+    $rightMenuItems = [];
+
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $rightMenuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = [
-            'label' => 'Data Master',
-            'items' => [
-                ['label' => 'Data Tarif', 'url' => ['/tarif/index']],
-                ['label' => 'Data Pelanggan', 'url' => ['/pelanggan/index']],
-                [
-                    'label' => 'Data User',
-                    'items' => [
-                        ['label' => 'Data Petugas', 'url' => ['/petugas/index']],
-                        ['label' => 'Data Agen', 'url' => ['/agen/index']],
+        $leftMenuItems = [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            [
+                'label' => 'Data Master',
+                'items' => [
+                    ['label' => 'Data Tarif', 'url' => ['/tarif/index']],
+                    ['label' => 'Data Pelanggan', 'url' => ['/pelanggan/index']],
+                    [
+                        'label' => 'Data User',
+                        'items' => [
+                            ['label' => 'Data Petugas', 'url' => ['/petugas/index']],
+                            ['label' => 'Data Agen', 'url' => ['/agen/index']],
+                        ],
                     ],
                 ],
             ],
-        ];
-        $menuItems[] = [
-            'label' => 'Data Transaksi',
-            'items' => [
-                ['label' => 'Data Penggunaan', 'url' => ['/penggunaan/index']],
-                ['label' => 'Data Tagihan', 'url' => ['/tagihan/index']],
+            [
+                'label' => 'Data Transaksi',
+                'items' => [
+                    ['label' => 'Data Penggunaan', 'url' => ['/penggunaan/index']],
+                    ['label' => 'Data Tagihan', 'url' => ['/tagihan/index']],
+                ],
+            ],
+            [
+                'label' => 'Laporan',
+                'items' => [
+                    ['label' => 'Data Tarif', 'url' => ['/laporan/tarif']],
+                    ['label' => 'Data Pelanggan', 'url' => ['/laporan/pelanggan']],
+                    ['label' => 'Data Agen', 'url' => ['/laporan/agen']],
+                ],
             ],
         ];
-        $menuItems[] = [
-            'label' => 'Laporan',
+        $rightMenuItems[] = [
+            'label' => 'Hi, ' . Yii::$app->user->identity->username,
             'items' => [
-                ['label' => 'Data Tarif', 'url' => ['/laporan/tarif']],
-                ['label' => 'Data Pelanggan', 'url' => ['/laporan/pelanggan']],
-                ['label' => 'Data Agen', 'url' => ['/laporan/agen']],
+                ['label' => 'Edit Profil', 'url' => ['/user/profile']],
+                ['label' => 'Logout', 'url' => ['/site/logout'], 'linkOptions' => ['method' => 'post']],
             ],
         ];
     }
     echo NavX::widget([
         'options' => ['class' => 'navbar-nav mr-auto'],
-        'items' => $menuItems,
+        'items' => $leftMenuItems,
         'activateParents' => true,
         'encodeLabels' => false
-    ]);
-    $menuItems = [];
-    $menuItems[] = '<li>'
-        . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-        . Html::submitButton(
-            'Logout (' . Yii::$app->user->identity->username . ')',
-            ['class' => 'btn btn-link logout']
-        )
-        . Html::endForm()
-        . '</li>';
-    echo NavX::widget([
+    ]) . NavX::widget([
         'options' => ['class' => 'navbar-nav'],
-        'items' => $menuItems,
+        'items' => $rightMenuItems,
         'activateParents' => true,
         'encodeLabels' => false
     ]);

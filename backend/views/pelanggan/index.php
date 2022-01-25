@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'enablePushState' => false,
             ],
         ],
+        'responsive' => true,
         'toolbar' => [
             [
                 'content' => Html::a('<i class="fas fa-plus"></i>', ['create'], [

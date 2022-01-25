@@ -19,18 +19,23 @@ $listTarif = Tarif::find()->select(['id', 'kode'])->all();
 
     <?= $form->errorSummary($model, ['encode' => false]) ?>
 
-    <?= $form->field($model, 'kode')->textInput(['maxlength' => true, 'readonly' => true]) ?>
-
-    <?= $form->field($model, 'no_meter')->textInput(['maxlength' => true, 'readonly' => true]) ?>
-
-    <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'alamat')->textarea(['rows' => 6]) ?>
+    <div class="row">
+        <div class="col-6">
+            <?= $form->field($model, 'kode')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+        </div>
+        <div class="col-6">
+            <?= $form->field($model, 'no_meter')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+        </div>
+    </div>
 
     <?= $form->field($model, 'tarif_id')->widget(Select2::class, [
         'data' => ArrayHelper::map($listTarif, 'id', 'kode'),
         'options' => ['placeholder' => 'Pilih Jenis Tarif ...'],
     ]) ?>
+
+    <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'alamat')->textarea(['rows' => 6]) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Simpan'), ['class' => 'btn btn-success']) ?>

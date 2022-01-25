@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'daya')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tarif_perkwh')->textInput() ?>
+    <?= $form->field($model, 'tarif_perkwh')->textInput(['type' => 'number']) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

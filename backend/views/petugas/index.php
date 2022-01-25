@@ -3,30 +3,33 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-use common\models\Tarif;
+use common\models\User;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\TarifSearch */
+/* @var $searchModel common\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Tarif');
+$this->title = Yii::t('app', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="tarif-index">
+<div class="user-index">
 
-    <?php if(Yii::$app->session->hasFlash('pelanggan')):?>
-        <div class="info">
-            <?php echo Yii::$app->session->getFlash('pelanggan'); ?>
-        </div>
-    <?php endif; ?>
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?php Pjax::begin(); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'panel' => [
             'type' => 'primary',
-            'heading' => 'Daftar Tarif',
+            'heading' => 'Daftar Petugas',
         ],
         'pjax' => true,
         'pjaxSettings' => [
@@ -40,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'content' => Html::a('<i class="fas fa-plus"></i>', ['create'], [
                     'class' => 'btn btn-success',
-                    'title' => Yii::t('app', 'Tambah Tarif'),
+                    'title' => Yii::t('app', 'Tambah Petugas'),
                     'data' => ['pjax' => 0],
                 ]),
                 'options' => ['class' => 'btn-group mr-2 me-2'],
@@ -56,17 +59,31 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
 
-            'kode',
-            'golongan',
-            'daya',
-            'tarif_perkwh',
+            'nama',
+            'alamat',
+            'no_telepon',
+            'jenis_kelamin',
+            'username',
+            'email:ntext',
+            [
+                'attribute' => 'status',
+                'filter' => [0 => 'Tidak Aktif', 1 => 'Aktif'],
+                'value' => function ($rowData) {
+                    return $rowData->status ? 'Aktif' : 'Tidak Aktif';
+                }
+            ],
+            //'role',
+
             [
                 'class' => kartik\grid\ActionColumn::class,
-                'urlCreator' => function ($action, Tarif $model, $key, $index, $column) {
+                'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                }
+                },
+                'template' => '{view} {update}'
             ],
         ],
     ]); ?>
+
+    <?php Pjax::end(); ?>
 
 </div>
