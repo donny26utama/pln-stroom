@@ -4,16 +4,16 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Tarif */
+/* @var $model common\models\User */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tarif'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = sprintf('%s-%s', $model->golongan, $model->daya);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="tarif-view">
+<div class="user-view">
 
-    <h1>Informasi Tarif</h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -29,10 +29,17 @@ $this->params['breadcrumbs'][] = sprintf('%s-%s', $model->golongan, $model->daya
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'kode',
-            'golongan',
-            'daya',
-            'tarif_perkwh',
+            'id',
+            'username',
+            'auth_key',
+            'password_hash',
+            'password_reset_token',
+            'email:email',
+            'status',
+            'created_at',
+            'updated_at',
+            'verification_token',
+            'role',
         ],
     ]) ?>
 

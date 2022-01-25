@@ -11,12 +11,16 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pelanggan'), 'url' =
 $this->params['breadcrumbs'][] = ['label' => $pelanggan, 'url' => ['view', 'id' => $model->uuid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
-<div class="pelanggan-update">
 
-    <h1>Ubah Data Pelanggan</h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+<div class="pelanggan-create col-12 col-md-6 offset-md-3">
+    <div class="card bg-light">
+        <div class="card-header">
+            Ubah Pelanggan
+        </div>
+        <div class="card-body">
+            <?= $this->render('_form', [
+                'model' => $model,
+            ]) ?>
+        </div>
+    </div>
 </div>
