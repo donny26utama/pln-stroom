@@ -5,11 +5,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Tarif */
 
-$this->title = Yii::t('app', 'Update Tarif: {name}', [
-    'name' => $model->id,
-]);
+$this->title = sprintf('%s | Tarif', Yii::t('app', 'Update {name}', [
+    'name' => $model->kode,
+]));
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tarif'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => sprintf('%s-%s', $model->golongan, $model->daya), 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => sprintf('%s-%s', $model->golongan, $model->daya), 'url' => ['view', 'id' => $model->uuid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Edit');
 ?>
 

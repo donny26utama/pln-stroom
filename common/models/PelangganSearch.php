@@ -17,8 +17,8 @@ class PelangganSearch extends Pelanggan
     public function rules()
     {
         return [
-            [['id', 'tarif_id'], 'integer'],
-            [['kode', 'no_meter', 'nama', 'alamat', 'tenggang'], 'safe'],
+            [['id', 'tarif_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['uuid', 'kode', 'no_meter', 'nama', 'alamat', 'tenggang'], 'safe'],
         ];
     }
 
@@ -43,6 +43,7 @@ class PelangganSearch extends Pelanggan
         $query = Pelanggan::find();
 
         // add conditions that should always apply here
+        $query->where(['deleted_at' => null]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -60,9 +61,13 @@ class PelangganSearch extends Pelanggan
         $query->andFilterWhere([
             'id' => $this->id,
             'tarif_id' => $this->tarif_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
         ]);
 
-        $query->andFilterWhere(['like', 'kode', $this->kode])
+        $query->andFilterWhere(['like', 'uuid', $this->uuid])
+            ->andFilterWhere(['like', 'kode', $this->kode])
             ->andFilterWhere(['like', 'no_meter', $this->no_meter])
             ->andFilterWhere(['like', 'nama', $this->nama])
             ->andFilterWhere(['like', 'alamat', $this->alamat])

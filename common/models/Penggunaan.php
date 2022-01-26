@@ -9,6 +9,7 @@ use Ramsey\Uuid\Uuid;
  * This is the model class for table "penggunaan".
  *
  * @property int $id
+ * @property string $uuid
  * @property string $kode
  * @property int $pelanggan_id
  * @property string $bulan
@@ -36,11 +37,14 @@ class Penggunaan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['petugas_id'], 'default', 'value' => Yii::$app->user->id],
+            [['uuid'], 'default', 'value' => $this->generateUuid()],
             [['meter_awal', 'meter_akhir'], 'default', 'value' => 0],
             [['kode', 'pelanggan_id', 'bulan', 'tahun'], 'required'],
             [['pelanggan_id', 'meter_awal', 'meter_akhir', 'petugas_id'], 'integer'],
             [['tahun', 'tgl_cek'], 'safe'],
             [['kode'], 'string', 'max' => 20],
+            [['uuid'], 'string', 'max' => 36],
             [['bulan'], 'string', 'max' => 2],
             [['meter_akhir'], 'validateMeterAkhir', 'on' => 'update'],
         ];
@@ -53,6 +57,7 @@ class Penggunaan extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'uuid' => Yii::t('app', 'UUID'),
             'kode' => Yii::t('app', 'Kode'),
             'pelanggan_id' => Yii::t('app', 'Pelanggan'),
             'bulan' => Yii::t('app', 'Bulan'),
@@ -63,6 +68,11 @@ class Penggunaan extends \yii\db\ActiveRecord
             'petugas_id' => Yii::t('app', 'Petugas'),
             'periode' => Yii::t('app', 'Bulan Penggunaan'),
         ];
+    }
+
+    public function generateUuid()
+    {
+        return Uuid::uuid4()->toString();
     }
 
     public function afterSave($insert, $changedAttributes)

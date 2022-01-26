@@ -36,6 +36,7 @@ class m220126_062410_create_penggunaan_table extends Migration
 
         $this->createTable($this->penggunaanTableName, [
             'id' => $this->primaryKey(),
+            'uuid' => $this->string(36)->notNull(),
             'kode' => $this->string(20)->notNull(),
             'pelanggan_id' => $this->integer()->notNull(),
             'bulan' => $this->string(2)->notNull(),
@@ -43,14 +44,14 @@ class m220126_062410_create_penggunaan_table extends Migration
             'meter_awal' => $this->integer()->notNull()->defaultValue(0),
             'meter_akhir' => $this->integer()->notNull(),
             'tgl_cek' => $this->date(),
-            'petugas_id' => $this->integer()->notNull(),
+            'petugas_id' => $this->integer(),
         ], $tableOptions);
 
         $this->createIndex('idx-penggunaan-kode', $this->penggunaanTableName, 'kode', true);
         $this->createIndex('idx-penggunaan-pelanggan_id', $this->penggunaanTableName, 'pelanggan_id');
         $this->createIndex('idx-penggunaan-petugas_id', $this->penggunaanTableName, 'petugas_id');
-        $this->addForeignKey('fk-penggunaan-pelanggan_id-to-pelanggan-id', $this->penggunaanTableName, 'pelanggan_id', $this->pelangganTableName, 'id');
-        $this->addForeignKey('fk-penggunaan-petugas_id-to-user-id', $this->penggunaanTableName, 'petugas_id', $this->petugasTableName, 'id');
+        $this->addForeignKey('fk-penggunaan-pelanggan_id-to-pelanggan-id', $this->penggunaanTableName, 'pelanggan_id', $this->pelangganTableName, 'id', 'CASCADE');
+        $this->addForeignKey('fk-penggunaan-petugas_id-to-user-id', $this->penggunaanTableName, 'petugas_id', $this->petugasTableName, 'id', 'SET NULL');
     }
 
     /**

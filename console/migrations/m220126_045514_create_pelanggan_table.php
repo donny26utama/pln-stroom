@@ -43,6 +43,7 @@ class m220126_045514_create_pelanggan_table extends Migration
             'tarif_id' => $this->integer()->notNull(),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
+            'deleted_at' => $this->integer(),
         ]);
 
         $this->createIndex('idx-pelanggan-tarif_id', $this->pelangganTableName, 'tarif_id');

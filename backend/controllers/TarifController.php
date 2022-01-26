@@ -4,9 +4,11 @@ namespace backend\controllers;
 
 use common\models\Tarif;
 use common\models\TarifSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * TarifController implements the CRUD actions for Tarif model.
@@ -21,8 +23,17 @@ class TarifController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -71,7 +82,7 @@ class TarifController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->uuid]);
             }
         } else {
             $model->loadDefaultValues();
@@ -94,7 +105,7 @@ class TarifController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->uuid]);
         }
 
         return $this->render('update', [
@@ -111,7 +122,9 @@ class TarifController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->deleted_at = time();
+        $model->save();
 
         return $this->redirect(['index']);
     }
@@ -125,7 +138,7 @@ class TarifController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Tarif::findOne(['id' => $id])) !== null) {
+        if (($model = Tarif::findOne(['uuid' => $id])) !== null) {
             return $model;
         }
 

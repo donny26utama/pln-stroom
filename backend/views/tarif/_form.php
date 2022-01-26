@@ -12,6 +12,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->errorSummary($model, ['encode' => false]) ?>
+
     <?= $form->field($model, 'kode')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'golongan')->textInput(['maxlength' => true]) ?>

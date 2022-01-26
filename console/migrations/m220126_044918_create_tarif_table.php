@@ -28,6 +28,7 @@ class m220126_044918_create_tarif_table extends Migration
             'tarif_perkwh' => $this->double()->notNull()->defaultValue(0),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
+            'deleted_at' => $this->integer(),
         ], $tableOptions);
     }
 
