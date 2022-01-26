@@ -18,7 +18,7 @@ class PembayaranDetail extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'pembayaran_detail';
+        return '{{%pembayaran_detail}}';
     }
 
     /**

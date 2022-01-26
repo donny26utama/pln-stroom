@@ -10,19 +10,10 @@ use kartik\grid\GridView;
 /* @var $searchModel common\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Users');
+$this->title = Yii::t('app', 'Petugas');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -72,18 +63,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $rowData->status ? 'Aktif' : 'Tidak Aktif';
                 }
             ],
-            //'role',
 
             [
                 'class' => kartik\grid\ActionColumn::class,
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
+                    return Url::toRoute([$action, 'id' => $model->kode]);
                 },
                 'template' => '{view} {update}'
             ],
         ],
     ]); ?>
-
-    <?php Pjax::end(); ?>
 
 </div>

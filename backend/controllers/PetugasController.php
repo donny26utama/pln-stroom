@@ -38,7 +38,7 @@ class PetugasController extends UserController
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->signup()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->kode]);
             }
         }
 
@@ -59,7 +59,7 @@ class PetugasController extends UserController
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->kode]);
         }
 
         return $this->render('update', [
@@ -76,7 +76,8 @@ class PetugasController extends UserController
      */
     protected function findModel($id)
     {
-        if (($model = UserPetugas::findOne(['id' => $id, ['in', 'role', [UserPetugas::ROLE_ADMIN, UserPetugas::ROLE_PETUGAS]]])) !== null) {
+        $model = UserPetugas::find()->where(['AND', ['kode' => $id], ['in', 'role', [UserPetugas::ROLE_ADMIN, UserPetugas::ROLE_PETUGAS]]])->one();
+        if ($model !== null) {
             return $model;
         }
 

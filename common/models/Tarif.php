@@ -20,7 +20,7 @@ class Tarif extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tarif';
+        return '{{%tarif}}';
     }
 
     /**

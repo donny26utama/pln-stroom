@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model common\models\User */
 
 $this->title = Yii::t('app', 'Tambah Petugas');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Petugas'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="petugas-create col-12 col-md-6 offset-md-3">

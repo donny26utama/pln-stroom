@@ -23,7 +23,7 @@ class Pelanggan extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'pelanggan';
+        return '{{%pelanggan}}';
     }
 
     /**

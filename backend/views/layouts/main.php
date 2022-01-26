@@ -77,10 +77,17 @@ AppAsset::register($this);
             'label' => 'Hi, ' . Yii::$app->user->identity->username,
             'items' => [
                 ['label' => 'Edit Profil', 'url' => ['/user/profile']],
-                ['label' => 'Logout', 'url' => ['/site/logout'], 'linkOptions' => ['method' => 'post']],
+                [
+                    'label' => 'Logout',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => [
+                        'data' => ['method' => 'post'],
+                    ],
+                ],
             ],
         ];
     }
+
     echo NavX::widget([
         'options' => ['class' => 'navbar-nav mr-auto'],
         'items' => $leftMenuItems,
@@ -92,6 +99,7 @@ AppAsset::register($this);
         'activateParents' => true,
         'encodeLabels' => false
     ]);
+
     NavBar::end();
     ?>
 </header>
