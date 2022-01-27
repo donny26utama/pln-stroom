@@ -12,17 +12,30 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
+ * @property string $uuid
  * @property string $username
+ * @property string $email
  * @property string $password_hash
+ * @property string $kode
+ * @property string $nama
+ * @property string|null $alamat
+ * @property string|null $no_telepon
+ * @property string $jenis_kelamin
+ * @property string $role
+ * @property int $status
  * @property string $password_reset_token
  * @property string $verification_token
  * @property string $email
  * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
- * @property string $role
+ * @property string|null $password_reset_token
+ * @property string|null $verification_token
+ * @property int $created_at
+ * @property int $updated_at
+ *
+ * @property Agen[] $agens
+ * @property Pembayaran[] $pembayarans
+ * @property Penggunaan[] $penggunaans
+ * @property Tagihan[] $tagihans
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -94,6 +107,46 @@ class User extends ActiveRecord implements IdentityInterface
             'password' => Yii::t('app', 'Password'),
             'c_password' => Yii::t('app', 'Konfirmasi Password'),
         ];
+    }
+
+    /**
+     * Gets query for [[Agens]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAgens()
+    {
+        return $this->hasMany(Agen::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Pembayarans]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPembayarans()
+    {
+        return $this->hasMany(Pembayaran::class, ['agen_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Penggunaans]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPenggunaans()
+    {
+        return $this->hasMany(Penggunaan::class, ['petugas_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Tagihans]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTagihans()
+    {
+        return $this->hasMany(Tagihan::class, ['petugas_id' => 'id']);
     }
 
     /**

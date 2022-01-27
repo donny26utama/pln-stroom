@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 
-$this->title = Yii::t('app', 'Update User: {name}', [
-    'name' => $model->id,
-]);
+$this->title = sprintf('%s | Pelanggan', Yii::t('app', 'Update {name}', [
+    'name' => $model->kode,
+]));
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Petugas'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->kode, 'url' => ['view', 'id' => $model->uuid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');

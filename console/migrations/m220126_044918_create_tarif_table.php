@@ -32,8 +32,11 @@ class m220126_044918_create_tarif_table extends Migration
         ], $tableOptions);
 
         $model = new Tarif();
-        $model->setDefaultValues();
-        $model->
+        $model->kode = 'R1/450VA';
+        $model->golongan = 'R1';
+        $model->daya = '450VA';
+        $model->tarif_perkwh = '1000';
+        $model->save();
     }
 
     /**

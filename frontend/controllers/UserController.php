@@ -1,9 +1,9 @@
 <?php
 
-namespace backend\controllers;
+namespace frontend\controllers;
 
 use common\models\User;
-use common\models\UserPetugas;
+use common\models\UserAgen;
 use common\models\UserSearch;
 use Yii;
 use yii\web\Controller;
@@ -43,19 +43,6 @@ class UserController extends Controller
         );
     }
 
-    /**
-     * Displays a single User model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
     public function actionProfile()
     {
         $model = $this->findModel(Yii::$app->user->identity->uuid);
@@ -78,7 +65,7 @@ class UserController extends Controller
      */
     protected function findModel($id)
     {
-        $model = UserPetugas::find()->where(['AND', ['uuid' => $id], ['in', 'role', [UserPetugas::ROLE_ADMIN, UserPetugas::ROLE_PETUGAS]]])->one();
+        $model = UserAgen::find()->where(['AND', ['uuid' => $id], ['role' => UserAgen::ROLE_AGEN]])->one();
         if ($model !== null) {
             return $model;
         }
