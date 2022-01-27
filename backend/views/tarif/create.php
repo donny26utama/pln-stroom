@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Tarif */
 
-$this->title = Yii::t('app', 'Create Tarif');
+$this->title = sprintf('%s | Tarif', Yii::t('app', 'Tarif Baru'));
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tarif'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Tarif Baru';
 ?>
@@ -15,10 +15,8 @@ $this->params['breadcrumbs'][] = 'Tarif Baru';
         <div class="card-header">
             Tarif Baru
         </div>
-        <div class="card-body">
-            <?= $this->render('_form', [
-                'model' => $model,
-            ]) ?>
-        </div>
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
     </div>
 </div>

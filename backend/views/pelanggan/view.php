@@ -6,10 +6,9 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Pelanggan */
 
-$pelanggan = sprintf('%s - %s', $model->kode, $model->nama);
-$this->title = sprintf('%s | Pelanggan', $pelanggan);
+$this->title = sprintf('%s | Pelanggan', $model->kode);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pelanggan'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $pelanggan;
+$this->params['breadcrumbs'][] = $model->kode;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="pelanggan-view">
@@ -18,7 +17,7 @@ $this->params['breadcrumbs'][] = $pelanggan;
 
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->uuid], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->uuid], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),

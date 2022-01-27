@@ -2,12 +2,13 @@
 
 namespace backend\controllers;
 
-use Yii;
 use common\models\Pelanggan;
 use common\models\PelangganSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * PelangganController implements the CRUD actions for Pelanggan model.
@@ -22,6 +23,15 @@ class PelangganController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::class,
                     'actions' => [

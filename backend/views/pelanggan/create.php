@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Pelanggan */
 
-$this->title = Yii::t('app', 'Create Pelanggan');
+$this->title = sprintf('%s | Pelanggan', Yii::t('app', 'Pelanggan Baru'));
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pelanggan'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = 'Pelanggan Baru';
 ?>
 
 <div class="pelanggan-create col-12 col-md-6 offset-md-3">
@@ -15,10 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="card-header">
             Pelanggan Baru
         </div>
-        <div class="card-body">
-            <?= $this->render('_form', [
-                'model' => $model,
-            ]) ?>
-        </div>
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
     </div>
 </div>

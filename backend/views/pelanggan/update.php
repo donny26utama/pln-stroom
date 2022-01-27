@@ -18,10 +18,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         <div class="card-header">
             Ubah Pelanggan
         </div>
-        <div class="card-body">
-            <?= $this->render('_form', [
-                'model' => $model,
-            ]) ?>
-        </div>
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
     </div>
 </div>

@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => kartik\grid\ActionColumn::class,
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->kode]);
+                    return Url::toRoute([$action, 'id' => $model->uuid]);
                 },
                 'template' => '{view} {update}'
             ],

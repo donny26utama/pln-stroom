@@ -18,10 +18,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Edit');
         <div class="card-header">
             Tarif Baru
         </div>
-        <div class="card-body">
-            <?= $this->render('_form', [
-                'model' => $model,
-            ]) ?>
-        </div>
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
     </div>
 </div>

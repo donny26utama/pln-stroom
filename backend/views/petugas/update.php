@@ -9,7 +9,7 @@ $this->title = Yii::t('app', 'Update User: {name}', [
     'name' => $model->id,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Petugas'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->kode, 'url' => ['view', 'id' => $model->kode]];
+$this->params['breadcrumbs'][] = ['label' => $model->kode, 'url' => ['view', 'id' => $model->uuid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="petugas-update col-12 col-md-6 offset-md-3">
@@ -17,10 +17,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         <div class="card-header">
             Ubah Petugas
         </div>
-        <div class="card-body">
-            <?= $this->render('_form', [
-                'model' => $model,
-            ]) ?>
-        </div>
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
     </div>
 </div>

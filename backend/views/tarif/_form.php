@@ -12,18 +12,20 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->errorSummary($model, ['encode' => false]) ?>
+    <div class="card-body">
+        <?= $form->errorSummary($model, ['encode' => false]) ?>
 
-    <?= $form->field($model, 'kode')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'kode')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'golongan')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'golongan')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'daya')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'daya')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tarif_perkwh')->textInput(['type' => 'number']) ?>
+        <?= $form->field($model, 'tarif_perkwh')->textInput(['type' => 'number']) ?>
+    </div>
 
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+    <div class="card-footer">
+        <?= Html::submitButton(Yii::t('app', 'Simpan'), ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
