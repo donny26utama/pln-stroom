@@ -18,10 +18,16 @@ class UserAgen extends User
         return [
             [['status'], 'default', 'value' => self::STATUS_INACTIVE],
             [['username', 'email'], 'trim'],
-            [['username', 'email'], 'unique'],
+            [['username', 'email', 'kode'], 'unique'],
             [['username'], 'string', 'min' => 2, 'max' => 255],
             [['email'], 'email'],
-            [['email'], 'string', 'max' => 255],
+            [['username', 'email', 'nama', 'role'], 'string', 'max' => 255],
+            [['uuid'], 'string', 'max' => 36],
+            [['kode', 'no_telepon'], 'string', 'max' => 20],
+            [['jenis_kelamin'], 'string', 'max' => 10],
+            [['alamat'], 'string'],
+            [['kode', 'username', 'email', 'nama', 'jenis_kelamin', 'role'], 'required'],
+            [['status', 'created_at', 'updated_at'], 'integer'],
             [['kode', 'username', 'email', 'nama', 'jenis_kelamin', 'agenFee', 'agenSaldo'], 'required'],
             [['password', 'c_password'], 'required', 'on' => 'create'],
             [['password', 'c_password'], 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
@@ -45,6 +51,7 @@ class UserAgen extends User
         $this->kode = sprintf('A%s%03s', $today, $kode);
 
         if ($this->isNewRecord) {
+            $this->role = User::ROLE_AGEN;
             $this->agenFee = 2500;
             $this->agenSaldo = 0;
         }

@@ -4,7 +4,6 @@ namespace backend\controllers;
 
 use common\models\UserSearch;
 use common\models\UserAgen;
-use common\models\Agen;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -68,7 +67,7 @@ class AgenController extends UserController
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->signup()) {
-                return $this->redirect(['view', 'id' => $model->kode]);
+                return $this->redirect(['view', 'id' => $model->uuid]);
             }
         }
 
@@ -93,7 +92,7 @@ class AgenController extends UserController
             $model->agen->saldo = $model->agenSaldo;
             $model->agen->save();
 
-            return $this->redirect(['view', 'id' => $model->kode]);
+            return $this->redirect(['view', 'id' => $model->uuid]);
         }
 
         return $this->render('update', [
@@ -110,7 +109,7 @@ class AgenController extends UserController
      */
     protected function findModel($id)
     {
-        $model = UserAgen::find()->where(['AND', ['kode' => $id], ['role' => UserAgen::ROLE_AGEN]])->one();
+        $model = UserAgen::find()->where(['AND', ['uuid' => $id], ['role' => UserAgen::ROLE_AGEN]])->one();
         if ($model !== null) {
             return $model;
         }

@@ -19,7 +19,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title) ?> | Agen Stroom</title>
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
@@ -53,21 +53,26 @@ AppAsset::register($this);
                 'url' => ['/laporan/pembayaran'],
             ],
         ];
-        $rigthMenuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
+        $rigthMenuItems[] = [
+            'label' => 'Hi, ' . Yii::$app->user->identity->username,
+            'labelOptions' => ['encode' => false],
+            'items' => [
+                ['label' => 'Edit Profil', 'url' => ['/user/profile']],
+                [
+                    'label' => 'Logout',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => [
+                        'data' => ['method' => 'post'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     echo NavX::widget([
         'options' => ['class' => 'navbar-nav mr-auto'],
         'items' => $menuItems,
-    ]);
-    echo NavX::widget([
+    ]) . NavX::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => $rigthMenuItems,
     ]);
