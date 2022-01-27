@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Edit');
 <div class="tarif-update col-12 col-md-6 offset-md-3">
     <div class="card bg-light">
         <div class="card-header">
-            Tarif Baru
+            Ubah Tarif
         </div>
         <?= $this->render('_form', [
             'model' => $model,

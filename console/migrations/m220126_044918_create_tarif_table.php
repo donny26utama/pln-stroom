@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Migration;
-use Ramsey\Uuid\Uuid;
+use common\models\Tarif;
 
 /**
  * Handles the creation of table `{{%tarif}}`.
@@ -30,6 +30,10 @@ class m220126_044918_create_tarif_table extends Migration
             'updated_at' => $this->integer()->notNull(),
             'deleted_at' => $this->integer(),
         ], $tableOptions);
+
+        $model = new Tarif();
+        $model->setDefaultValues();
+        $model->
     }
 
     /**
