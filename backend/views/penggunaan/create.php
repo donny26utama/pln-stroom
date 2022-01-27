@@ -5,14 +5,14 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model common\models\Penggunaan */
 
-$this->title = Yii::t('app', 'Create Penggunaan');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Penggunaans'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = sprintf('%s | Penggunaan', Yii::t('app', 'Penggunaan Baru'));
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Penggunaan'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = 'Penggunaan Baru';
 ?>
 <div class="penggunaan-create">
     <div class="row">
         <div class="col-6 offset-3">
-            <div class="card mb-3">
+            <div class="card bg-light mb-3">
                 <div class="card-header">
                     Cari Pelanggan
                 </div>
@@ -31,19 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <?php if (isset($filter['search'])) : ?>
         <div class="col-6 offset-3">
-            <div class="card mb-3">
+            <div class="card bg-light mb-3">
                 <div class="card-header">
                     Input Data Penggunaan
                 </div>
-                <div class="card-body">
-                    <?php if (!$model->isNewRecord) : ?>
-                        <?= $this->render('_form', [
-                            'model' => $model,
-                        ]) ?>
-                    <?php else :?>
-                        <h1>Data Pelanggan Tidak Ditemukan atau Data Penggunaan Sudah Diinput.</h1>
-                    <?php endif ?>
-                </div>
+                <?= $this->render('_form', [
+                    'model' => $model,
+                ]) ?>
             </div>
         </div>
         <?php endif ?>

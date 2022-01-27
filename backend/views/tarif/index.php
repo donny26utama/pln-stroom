@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
 use common\models\Tarif;
 use kartik\grid\GridView;
 
@@ -63,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => kartik\grid\ActionColumn::class,
                 'urlCreator' => function ($action, Tarif $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
+                    return Url::toRoute([$action, 'id' => $model->uuid]);
                 }
             ],
         ],

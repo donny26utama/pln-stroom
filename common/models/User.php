@@ -247,4 +247,15 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public function validatePasswordInput($attribute)
+    {
+        if (!$this->hasErrors()) {
+            if ($this->password !== $this->c_password) {
+                $this->addError($attribute, 'password yang diinput tidak sama.');
+            } else {
+                $this->setPassword($this->password);
+            }
+        }
+    }
 }

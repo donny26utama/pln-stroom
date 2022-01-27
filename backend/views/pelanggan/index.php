@@ -67,11 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'urlCreator' => function ($action, Pelanggan $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->uuid]);
                 },
-                'buttons' => [
-                    'delete' => function ($url, Pelanggan $model) {
-                        return !$model->pelangganBaru ? Html::a('<i class="fas fa-remove"></i>', $url) : '';
-                    },
-                ],
             ],
         ],
     ]); ?>

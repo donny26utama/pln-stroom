@@ -3,18 +3,27 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use Ramsey\Uuid\Uuid;
 
 /**
  * This is the model class for table "pelanggan".
  *
  * @property int $id
+ * @property string $uuid
  * @property string $kode
  * @property string $no_meter
  * @property string $nama
  * @property string $alamat
  * @property string $tenggang
  * @property int $tarif_id
+ * @property int $created_at
+ * @property int $updated_at
+ * @property int $deleted_at
+ *
+ * @property Penggunaan[] $penggunaans
+ * @property Tagihan[] $tagihans
+ * @property Tarif $tarif
  */
 class Pelanggan extends \yii\db\ActiveRecord
 {
@@ -23,7 +32,17 @@ class Pelanggan extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'pelanggan';
+        return '{{%pelanggan}}';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
     }
 
     /**
@@ -32,14 +51,15 @@ class Pelanggan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['kode', 'no_meter', 'nama', 'alamat', 'tenggang', 'tarif_id'], 'required'],
+            [['uuid'], 'default', 'value' => $this->generateUuid()],
+            [['uuid', 'kode', 'no_meter', 'nama', 'alamat', 'tenggang', 'tarif_id'], 'required'],
             [['alamat'], 'string'],
-            [['tarif_id'], 'integer'],
-            [['kode'], 'string', 'max' => 14],
-            [['no_meter'], 'string', 'max' => 12],
+            [['tarif_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['uuid'], 'string', 'max' => 36],
+            [['kode', 'no_meter'], 'string', 'max' => 14],
             [['nama'], 'string', 'max' => 50],
             [['tenggang'], 'string', 'max' => 2],
-            [['uuid'], 'thamtech\uuid\validators\UuidValidator'],
+            [['tarif_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tarif::class, 'targetAttribute' => ['tarif_id' => 'id']],
         ];
     }
 
@@ -53,11 +73,59 @@ class Pelanggan extends \yii\db\ActiveRecord
             'uuid' => Yii::t('app', 'UUID'),
             'kode' => Yii::t('app', 'ID Pelanggan'),
             'no_meter' => Yii::t('app', 'No Meter'),
-            'nama' => Yii::t('app', 'Nama Lengkap'),
+            'nama' => Yii::t('app', 'Nama'),
             'alamat' => Yii::t('app', 'Alamat'),
             'tenggang' => Yii::t('app', 'Tenggang'),
             'tarif_id' => Yii::t('app', 'Jenis Tarif'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'deleted_at' => Yii::t('app', 'Deleted At'),
         ];
+    }
+
+    /**
+     * Gets query for [[Penggunaans]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPenggunaans()
+    {
+        return $this->hasMany(Penggunaan::class, ['pelanggan_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Tagihans]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTagihans()
+    {
+        return $this->hasMany(Tagihan::class, ['pelanggan_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Tarif]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTarif()
+    {
+        return $this->hasOne(Tarif::class, ['id' => 'tarif_id']);
+    }
+
+    public function getPelangganBaru()
+    {
+        return $this->getPenggunaans()->andWhere(['meter_awal' => 0, 'meter_akhir' => 0]);
+    }
+
+    public function getPenggunaanBaru()
+    {
+        return $this->getPenggunaans()->andWhere(['meter_akhir' => 0])->one();
+    }
+
+    public function getTunggakan()
+    {
+        return $this->getTagihans()->andWhere(['status' => Tagihan::STATUS_UNPAID])->count();
     }
 
     /**
@@ -72,7 +140,12 @@ class Pelanggan extends \yii\db\ActiveRecord
         }
     }
 
-    private function generatePenggunaan($periode = '')
+    public function generateUuid()
+    {
+        return Uuid::uuid4()->toString();
+    }
+
+    private function generatePenggunaan()
     {
         $model = new Penggunaan();
         $model->kode = $this->kode . date('mY');
@@ -88,40 +161,15 @@ class Pelanggan extends \yii\db\ActiveRecord
 
         $this->tenggang = date('d');
         $this->kode = date('YmdHis');
-        $this->uuid = Uuid::uuid4();
 
         $prefix = '';
         $prefix = date('z') < 10 ? '00' : (date('z') < 100 ? '0' : '');
         $this->no_meter = sprintf('%s%s', $prefix, date('zymNHs'));
     }
 
-    public function getTarif()
+    public function softDelete()
     {
-        return $this->hasOne(Tarif::class, ['id' => 'tarif_id']);
-    }
-
-    public function getPenggunaan()
-    {
-        return $this->hasMany(Penggunaan::class, ['pelanggan_id' => 'id']);
-    }
-
-    public function getTagihan()
-    {
-        return $this->hasMany(Tagihan::class, ['pelanggan_id' => 'id']);
-    }
-
-    public function getPelangganBaru()
-    {
-        return $this->getPenggunaan()->andWhere(['meter_awal' => 0, 'meter_akhir' => 0]);
-    }
-
-    public function getPenggunaanBaru()
-    {
-        return $this->getPenggunaan()->andWhere(['meter_akhir' => 0])->one();
-    }
-
-    public function getTunggakan()
-    {
-        return $this->getTagihan()->andWhere(['status' => Tagihan::STATUS_UNPAID])->count();
+        $this->deleted_at = time();
+        $this->save();
     }
 }

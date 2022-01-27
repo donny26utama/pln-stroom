@@ -10,43 +10,67 @@ use kartik\grid\GridView;
 /* @var $searchModel common\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Users');
+$this->title = Yii::t('app', 'Agen');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'panel' => [
+            'type' => 'primary',
+            'heading' => 'Daftar Agen',
+        ],
+        'pjax' => true,
+        'pjaxSettings' => [
+            'neverTimeout' => true,
+            'options' => [
+                'enablePushState' => false,
+            ],
+        ],
         'responsive' => true,
+        'toolbar' => [
+            [
+                'content' => Html::a('<i class="fas fa-plus"></i>', ['create'], [
+                    'class' => 'btn btn-success',
+                    'title' => Yii::t('app', 'Tambah Agen'),
+                    'data' => ['pjax' => 0],
+                ]),
+                'options' => ['class' => 'btn-group mr-2 me-2'],
+            ],
+            [
+                'content' => common\widgets\PageSize::widget([
+                    'template' => '{list}',
+                    'sizes' => [5 => 5, 10 => 10, 20 => 20, 25 => 25, 50 => 50],
+                ]),
+            ],
+        ],
+        'filterSelector' => 'select[name="per-page"]',
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
 
+            'nama',
+            'alamat',
+            'no_telepon',
+            'jenis_kelamin',
             'username',
-            'email:email',
-            'status',
-            //'created_at',
-            //'updated_at',
-            //'verification_token',
-            //'role',
+            'email:ntext',
+            [
+                'attribute' => 'status',
+                'filter' => [0 => 'Tidak Aktif', 1 => 'Aktif'],
+                'value' => function ($rowData) {
+                    return $rowData->status ? 'Aktif' : 'Tidak Aktif';
+                }
+            ],
+
             [
                 'class' => kartik\grid\ActionColumn::class,
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
+                    return Url::toRoute([$action, 'id' => $model->kode]);
                 }
             ],
         ],
     ]); ?>
-
-    <?php Pjax::end(); ?>
 
 </div>

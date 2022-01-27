@@ -26,7 +26,7 @@ class Pembayaran extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'pembayaran';
+        return '{{%pembayaran}}';
     }
 
     /**

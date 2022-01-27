@@ -5,16 +5,17 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 
-$this->title = Yii::t('app', 'Create User');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = sprintf('%s | Petugas', Yii::t('app', 'Petugas Baru'));
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Petugas'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = 'Petugas Baru';
 ?>
-<div class="user-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+<div class="petugas-create col-12 col-md-6 offset-md-3">
+    <div class="card bg-light">
+        <div class="card-header">
+            Petugas Baru
+        </div>
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
+    </div>
 </div>

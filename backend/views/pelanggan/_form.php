@@ -17,27 +17,29 @@ $listTarif = Tarif::find()->select(['id', 'kode'])->all();
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->errorSummary($model, ['encode' => false]) ?>
+    <div class="card-body">
+        <?= $form->errorSummary($model, ['encode' => false]) ?>
 
-    <div class="row">
-        <div class="col-6">
-            <?= $form->field($model, 'kode')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+        <div class="row">
+            <div class="col-6">
+                <?= $form->field($model, 'kode')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+            </div>
+            <div class="col-6">
+                <?= $form->field($model, 'no_meter')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+            </div>
         </div>
-        <div class="col-6">
-            <?= $form->field($model, 'no_meter')->textInput(['maxlength' => true, 'readonly' => true]) ?>
-        </div>
+
+        <?= $form->field($model, 'tarif_id')->widget(Select2::class, [
+            'data' => ArrayHelper::map($listTarif, 'id', 'kode'),
+            'options' => ['placeholder' => 'Pilih Jenis Tarif ...'],
+        ]) ?>
+
+        <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'alamat')->textarea(['rows' => 6]) ?>
     </div>
 
-    <?= $form->field($model, 'tarif_id')->widget(Select2::class, [
-        'data' => ArrayHelper::map($listTarif, 'id', 'kode'),
-        'options' => ['placeholder' => 'Pilih Jenis Tarif ...'],
-    ]) ?>
-
-    <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'alamat')->textarea(['rows' => 6]) ?>
-
-    <div class="form-group">
+    <div class="card-footer">
         <?= Html::submitButton(Yii::t('app', 'Simpan'), ['class' => 'btn btn-success']) ?>
     </div>
 

@@ -19,7 +19,7 @@ class Agen extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'agen';
+        return '{{%agen}}';
     }
 
     /**
