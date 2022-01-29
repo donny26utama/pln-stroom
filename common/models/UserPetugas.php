@@ -44,6 +44,7 @@ class UserPetugas extends User
 
         $kode = $lastPetugas ? substr($lastPetugas->kode, 9, 3) + 1 : 1;
         $this->kode = sprintf('P%s%03s', $today, $kode);
+        $this->role = self::ROLE_PETUGAS;
     }
 
     /**

@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 
 /**
  * TarifController implements the CRUD actions for Tarif model.
@@ -55,6 +56,7 @@ class TarifController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'queryParams' => $this->request->queryParams,
         ]);
     }
 
@@ -127,6 +129,37 @@ class TarifController extends Controller
         $model->save();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Export all Tarif data.
+     *
+     * @return string
+     */
+    public function actionExport()
+    {
+        $searchModel = new TarifSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $data = $dataProvider->query->all();
+
+        $fileName = 'Laporan Tarif.xlsx';
+        $headers = WriterEntityFactory::createRowFromArray(['Kode', 'Golongan', 'Daya', 'Tarif/Kwh']);
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($fileName);
+        $writer->addRow($headers);
+
+        foreach ($data as $tarif) {
+            $row = WriterEntityFactory::createRowFromArray([
+                $tarif->kode,
+                $tarif->golongan,
+                $tarif->daya,
+                $tarif->tarif_perkwh,
+            ]);
+            $writer->addRow($row);
+        }
+
+        $writer->close();
     }
 
     /**

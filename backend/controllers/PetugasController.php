@@ -8,6 +8,7 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 
 class PetugasController extends UserController
 {
@@ -46,12 +47,13 @@ class PetugasController extends UserController
     public function actionIndex()
     {
         $searchModel = new UserSearch();
-        $searchModel->role = ['admin', 'petugas'];
+        $searchModel->role = 'petugas';
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'queryParams' => $this->request->queryParams,
         ]);
     }
 
@@ -94,6 +96,49 @@ class PetugasController extends UserController
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Export all Tarif data.
+     *
+     * @return string
+     */
+    public function actionExport()
+    {
+        $searchModel = new UserSearch();
+        $searchModel->role = 'petugas';
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $data = $dataProvider->query->all();
+
+        $fileName = 'Laporan Petugas.xlsx';
+        $headers = WriterEntityFactory::createRowFromArray([
+            'ID Petugas',
+            'Nama Petugas',
+            'Alamat',
+            'No.Telp',
+            'Jenis Kelamin',
+            'email',
+            'Status'
+        ]);
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($fileName);
+        $writer->addRow($headers);
+
+        foreach ($data as $petugas) {
+            $row = WriterEntityFactory::createRowFromArray([
+                $petugas->kode,
+                $petugas->nama,
+                $petugas->alamat,
+                $petugas->no_telepon,
+                ucwords($petugas->jenis_kelamin),
+                $petugas->email,
+                $petugas->status ? 'Aktif' : 'Tidak Aktif',
+            ]);
+            $writer->addRow($row);
+        }
+
+        $writer->close();
     }
 
     /**

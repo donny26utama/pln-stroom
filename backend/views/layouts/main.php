@@ -67,9 +67,9 @@ AppAsset::register($this);
             [
                 'label' => 'Laporan',
                 'items' => [
-                    ['label' => 'Data Tarif', 'url' => ['/laporan/tarif']],
-                    ['label' => 'Data Pelanggan', 'url' => ['/laporan/pelanggan']],
-                    ['label' => 'Data Agen', 'url' => ['/laporan/agen']],
+                    ['label' => 'Tagihan per Bulan', 'url' => ['/laporan/tagihan-per-bulan']],
+                    ['label' => 'Tunggakan', 'url' => ['/laporan/tunggakan']],
+                    ['label' => 'Riwayat Penggunaan per Tahun', 'url' => ['/laporan/penggunaan-per-tahun']],
                 ],
             ],
         ];
@@ -114,7 +114,7 @@ AppAsset::register($this);
     </div>
 </main>
 
-<footer class="footer mt-auto py-3 text-muted">
+<footer class="footer mt-auto py-3 text-muted d-print-none">
     <div class="container">
         <p class="float-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
         <p class="float-right"><?= Yii::powered() ?></p>

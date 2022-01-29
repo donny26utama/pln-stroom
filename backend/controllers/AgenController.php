@@ -8,6 +8,7 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 
 class AgenController extends UserController
 {
@@ -52,6 +53,7 @@ class AgenController extends UserController
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'queryParams' => $this->request->queryParams,
         ]);
     }
 
@@ -98,6 +100,51 @@ class AgenController extends UserController
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Export all Tarif data.
+     *
+     * @return string
+     */
+    public function actionExport()
+    {
+        $searchModel = new UserSearch();
+        $searchModel->role = 'agen';
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $data = $dataProvider->query->all();
+
+        $fileName = 'Laporan Agen.xlsx';
+        $headers = WriterEntityFactory::createRowFromArray([
+            'ID Agen',
+            'Nama Agen',
+            'Alamat',
+            'No.Telp',
+            'Jenis Kelamin',
+            'email',
+            'Fee',
+            'Status'
+        ]);
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($fileName);
+        $writer->addRow($headers);
+
+        foreach ($data as $agen) {
+            $row = WriterEntityFactory::createRowFromArray([
+                $agen->kode,
+                $agen->nama,
+                $agen->alamat,
+                $agen->no_telepon,
+                ucwords($agen->jenis_kelamin),
+                $agen->email,
+                $agen->agen->fee,
+                $agen->status ? 'Aktif' : 'Tidak Aktif',
+            ]);
+            $writer->addRow($row);
+        }
+
+        $writer->close();
     }
 
     /**
