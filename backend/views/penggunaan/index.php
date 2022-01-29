@@ -59,12 +59,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'bulan',
             'tahun',
 
-            [
-                'class' => kartik\grid\ActionColumn::class,
-                'urlCreator' => function ($action, Penggunaan $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->uuid]);
-                }
-            ],
+            // [
+            //     'class' => kartik\grid\ActionColumn::class,
+            //     'urlCreator' => function ($action, Penggunaan $model, $key, $index, $column) {
+            //         return Url::toRoute([$action, 'id' => $model->uuid]);
+            //     }
+            // ],
         ],
     ]); ?>
 

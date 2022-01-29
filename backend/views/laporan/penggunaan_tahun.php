@@ -2,18 +2,18 @@
 
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use common\models\Tagihan;
+use common\models\Penggunaan;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\TagihanSearch */
+/* @var $searchModel common\models\PenggunaanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Laporan Tagihan per Bulan');
+$this->title = Yii::t('app', 'Laporan Riwayat Penggunaan per Tahun');
 $this->params['breadcrumbs'][] = 'Laporan';
-$this->params['breadcrumbs'][] = 'Tagihan per Bulan';
+$this->params['breadcrumbs'][] = 'Penggunaan per Tahun';
 
-$listTahun = Tagihan::find()->select('tahun')->groupBy(['tahun'])->orderBy(['tahun' => SORT_ASC])->all();
+$listTahun = Penggunaan::find()->select('tahun')->groupBy(['tahun'])->orderBy(['tahun' => SORT_ASC])->all();
 $listBulan = Yii::$app->params['bulan'];
 ?>
 <div class="laporan-index">
@@ -23,7 +23,7 @@ $listBulan = Yii::$app->params['bulan'];
         'filterModel' => $searchModel,
         'panel' => [
             'type' => 'primary',
-            'heading' => 'Laporan Tagihan per Bulan',
+            'heading' => 'Laporan Riwayat Penggunaan per Tahun',
         ],
         'pjax' => true,
         'pjaxSettings' => [
@@ -57,28 +57,18 @@ $listBulan = Yii::$app->params['bulan'];
             [
                 'attribute' => 'pelanggan_id',
                 'header' => 'ID Pelanggan',
-                'filter' => false,
-                'value' => function (Tagihan $dataRow) {
+                'value' => function (Penggunaan $dataRow) {
                     return $dataRow->pelanggan->kode;
                 }
             ],
             [
-                'attribute' => 'pelanggan_id',
+                'attribute' => 'pelanggan.nama',
                 'header' => 'Nama Pelanggan',
-                'filter' => false,
-                'value' => function (Tagihan $dataRow) {
-                    return $dataRow->pelanggan->nama;
-                }
             ],
             [
                 'attribute' => 'bulan',
-                'filterType' => GridView::FILTER_SELECT2,
-                'filterWidgetOptions' => [
-                    'data' => $listBulan,
-                    'options' => ['placeholder' => 'Pilih Bulan'],
-                    'pluginOptions' => ['allowClear' => true],
-                ],
-                'value' => function (Tagihan $dataRow) use ($listBulan) {
+                'filter' => false,
+                'value' => function (Penggunaan $dataRow) use ($listBulan) {
                     return $listBulan[$dataRow->bulan];
                 }
             ],
@@ -91,33 +81,11 @@ $listBulan = Yii::$app->params['bulan'];
                     'pluginOptions' => ['allowClear' => true],
                 ],
             ],
-            [
-                'attribute' => 'jumlah_meter',
-                'filter' => false,
-            ],
-            //'tarif_perkwh',
-            [
-                'attribute' => 'total_bayar',
-                'filter' => false,
-            ],
-            //'data:ntext',
-            [
-                'attribute' => 'status',
-                'filterType' => GridView::FILTER_SELECT2,
-                'filterWidgetOptions' => [
-                    'hideSearch' => true,
-                    'data' => [0 => 'Belum Dibayar', 1 => 'Terbayar',],
-                    'options' => ['placeholder' => 'Semua Status'],
-                    'pluginOptions' => ['allowClear' => true],
-                ],
-            ],
-            [
-                'attribute' => 'petugas_id',
-                'filter' => false,
-                'value' => function (Tagihan $dataRow) {
-                    return $dataRow->petugas->nama;
-                }
-            ],
+            'meter_awal',
+            'meter_akhir',
+            'tagihan.jumlah_meter',
+            'tagihan.tarif_perkwh',
+            'tagihan.total_bayar',
         ],
     ]); ?>
 

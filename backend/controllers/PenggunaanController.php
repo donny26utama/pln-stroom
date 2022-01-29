@@ -94,7 +94,8 @@ class PenggunaanController extends Controller
             $model->petugas_id = Yii::$app->user->identity->id;
 
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                // return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         } else {
             $model->setDefaultValues();
