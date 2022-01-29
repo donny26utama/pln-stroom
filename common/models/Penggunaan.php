@@ -13,11 +13,14 @@ use Ramsey\Uuid\Uuid;
  * @property string $kode
  * @property int $pelanggan_id
  * @property string $bulan
- * @property string $tahun
+ * @property int $tahun
  * @property int $meter_awal
  * @property int $meter_akhir
  * @property string|null $tgl_cek
  * @property int|null $petugas_id
+ *
+ * @property Pelanggan $pelanggan
+ * @property User $petugas
  */
 class Penggunaan extends \yii\db\ActiveRecord
 {
@@ -40,12 +43,15 @@ class Penggunaan extends \yii\db\ActiveRecord
             [['petugas_id'], 'default', 'value' => Yii::$app->user->id],
             [['uuid'], 'default', 'value' => $this->generateUuid()],
             [['meter_awal', 'meter_akhir'], 'default', 'value' => 0],
-            [['kode', 'pelanggan_id', 'bulan', 'tahun'], 'required'],
-            [['pelanggan_id', 'meter_awal', 'meter_akhir', 'petugas_id'], 'integer'],
-            [['tahun', 'tgl_cek'], 'safe'],
-            [['kode'], 'string', 'max' => 20],
+            [['uuid', 'kode', 'pelanggan_id', 'bulan', 'tahun', 'meter_akhir'], 'required'],
+            [['pelanggan_id', 'tahun', 'meter_awal', 'meter_akhir', 'petugas_id'], 'integer'],
+            [['tgl_cek'], 'safe'],
             [['uuid'], 'string', 'max' => 36],
+            [['kode'], 'string', 'max' => 20],
             [['bulan'], 'string', 'max' => 2],
+            [['kode'], 'unique'],
+            [['pelanggan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pelanggan::class, 'targetAttribute' => ['pelanggan_id' => 'id']],
+            [['petugas_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['petugas_id' => 'id']],
             [['meter_akhir'], 'validateMeterAkhir', 'on' => 'update'],
         ];
     }
@@ -66,8 +72,37 @@ class Penggunaan extends \yii\db\ActiveRecord
             'meter_akhir' => Yii::t('app', 'Meter Akhir'),
             'tgl_cek' => Yii::t('app', 'Tanggal Pengecekan'),
             'petugas_id' => Yii::t('app', 'Petugas'),
-            'periode' => Yii::t('app', 'Bulan Penggunaan'),
         ];
+    }
+
+    /**
+     * Gets query for [[Pelanggan]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPelanggan()
+    {
+        return $this->hasOne(Pelanggan::class, ['id' => 'pelanggan_id']);
+    }
+
+    /**
+     * Gets query for [[Petugas]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPetugas()
+    {
+        return $this->hasOne(User::class, ['id' => 'petugas_id']);
+    }
+
+    /**
+     * Gets query for [[Tagihan]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTagihan()
+    {
+        return $this->hasOne(Tagihan::class, ['pelanggan_id' => 'pelanggan_id', 'bulan' => 'bulan', 'tahun' => 'tahun']);
     }
 
     public function generateUuid()
@@ -129,10 +164,5 @@ class Penggunaan extends \yii\db\ActiveRecord
             $pelanggan = $this->pelanggan;
             $this->periode = date('M Y', strtotime(sprintf('%s-%s-01', $this->tahun, $this->bulan)));
         }
-    }
-
-    public function getPelanggan()
-    {
-        return $this->hasOne(Pelanggan::class, ['id' => 'pelanggan_id']);
     }
 }
