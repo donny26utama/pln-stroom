@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use Ramsey\Uuid\Uuid;
 
 /**
  * This is the model class for table "pembayaran".
@@ -20,6 +21,7 @@ use Yii;
 class Pembayaran extends \yii\db\ActiveRecord
 {
     public $tanggal;
+    public $tempTagihan;
 
     /**
      * {@inheritdoc}
@@ -40,6 +42,7 @@ class Pembayaran extends \yii\db\ActiveRecord
             [['jumlah_tagihan', 'biaya_admin', 'total_bayar', 'bayar', 'kembalian'], 'number'],
             [['agen_id'], 'integer'],
             [['uuid'], 'string', 'max' => 36],
+            [['bayar'], 'validateBayar'],
         ];
     }
 
@@ -61,6 +64,15 @@ class Pembayaran extends \yii\db\ActiveRecord
         ];
     }
 
+    public function validateBayar($attribute)
+    {
+        if (!$this->hasErrors()) {
+            if ($this->bayar < $this->total_bayar) {
+                $this->addError($attribute, 'Nominal Bayar tidak boleh kurang dari Total Bayar');
+            }
+        }
+    }
+
     public function setDefaultValues()
     {
         $this->loadDefaultValues();
@@ -70,6 +82,25 @@ class Pembayaran extends \yii\db\ActiveRecord
 
         if ($this->agen_id) {
             $this->biaya_admin = $this->agen->fee;
+        }
+
+        $this->uuid = Uuid::uuid4()->toString();
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($insert) {
+            foreach ($this->tempTagihan as $tagihan) {
+                $model = new PembayaranDetail();
+                $model->uuid = Uuid::uuid4()->toString();
+                $model->pembayaran_id = $this->id;
+                $model->tagihan_id = $tagihan->id;
+                $model->save();
+                $tagihan->status = 1;
+                $tagihan->save();
+            }
         }
     }
 

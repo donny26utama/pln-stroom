@@ -47,6 +47,8 @@ use yii\widgets\ActiveForm;
         </tbody>
     </table>
 
+    <?= $form->errorSummary($model, ['encode' => false]) ?>
+
     <?= $form->field($model, 'tanggal')->textInput(['readonly' => true]) ?>
 
     <?= $form->field($model, 'jumlah_tagihan')->textInput(['readonly' => true]) ?>

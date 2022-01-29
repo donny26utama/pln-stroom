@@ -2,9 +2,10 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 use yii\widgets\Pjax;
+use common\models\Pembayaran;
+use kartik\grid\GridView;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\PembayaranSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -27,23 +28,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
 
-            'id',
-            'uuid',
-            'tgl_bayar',
+            'tgl_bayar:date',
             'jumlah_tagihan',
             'biaya_admin',
             //'total_bayar',
             //'bayar',
             //'kembalian',
             //'agen_id',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Pembayaran $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
+
+            // [
+            //     'class' => kartik\grid\ActionColumn::class,
+            //     'urlCreator' => function ($action, Pembayaran $model, $key, $index, $column) {
+            //         return Url::toRoute([$action, 'id' => $model->id]);
+            //     }
+            // ],
         ],
     ]); ?>
 
