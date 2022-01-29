@@ -45,6 +45,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'options' => ['class' => 'btn-group mr-2 me-2'],
             ],
             [
+                'content' => Html::a('<i class="far fa-file-excel"></i>', ['export', $queryParams], [
+                    'class' => 'btn btn-outline-info',
+                    'title' => Yii::t('app', 'Export Tarif'),
+                    'data' => ['pjax' => 0],
+                    'target' => '_blank',
+                ]),
+                'options' => ['class' => 'btn-group mr-2 me-2'],
+            ],
+            [
                 'content' => common\widgets\PageSize::widget([
                     'template' => '{list}',
                     'sizes' => [5 => 5, 10 => 10, 20 => 20, 25 => 25, 50 => 50],

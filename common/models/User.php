@@ -149,6 +149,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Tagihan::class, ['petugas_id' => 'id']);
     }
 
+    public function getAgen()
+    {
+        return $this->hasOne(Agen::class, ['user_id' => 'id']);
+    }
+
     /**
      * {@inheritdoc}
      */

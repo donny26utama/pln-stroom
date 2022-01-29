@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 
 /**
  * PelangganController implements the CRUD actions for Pelanggan model.
@@ -55,6 +56,7 @@ class PelangganController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'queryParams' => $this->request->queryParams,
         ]);
     }
 
@@ -127,6 +129,46 @@ class PelangganController extends Controller
         $this->findModel($id)->softDelete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Export all Tarif data.
+     *
+     * @return string
+     */
+    public function actionExport()
+    {
+        $searchModel = new PelangganSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $data = $dataProvider->query->all();
+
+        $fileName = 'Laporan Pelanggan.xlsx';
+        $headers = WriterEntityFactory::createRowFromArray([
+            'ID Pelanggan',
+            'No. Meteran',
+            'Nama Pelanggan',
+            'Alamat',
+            'Tenggang',
+            'Jenis Tarif',
+        ]);
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($fileName);
+        $writer->addRow($headers);
+
+        foreach ($data as $pelanggan) {
+            $row = WriterEntityFactory::createRowFromArray([
+                $pelanggan->kode,
+                $pelanggan->no_meter,
+                $pelanggan->nama,
+                $pelanggan->alamat,
+                $pelanggan->tenggang,
+                $pelanggan->tarif->kode,
+            ]);
+            $writer->addRow($row);
+        }
+
+        $writer->close();
     }
 
     /**
