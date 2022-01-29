@@ -86,8 +86,13 @@ class PembayaranController extends Controller
         }
 
         if ($this->request->isPost) {
+            $model->load($this->request->post());
+            $model->tempTagihan = $tagihan;
+            $model->kembalian = $model->bayar - $model->total_bayar;
+
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                // return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         }
 
