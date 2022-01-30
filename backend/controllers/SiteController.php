@@ -79,6 +79,7 @@ class SiteController extends Controller
         $this->layout = 'blank';
 
         $model = new LoginForm();
+        $model->site = LoginForm::SITE_PLN;
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }

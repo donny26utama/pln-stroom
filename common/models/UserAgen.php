@@ -38,6 +38,25 @@ class UserAgen extends User
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE, 'role' => self::ROLE_AGEN]);
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+        return static::findOne(['username' => $username, 'role' => self::ROLE_AGEN, 'status' => self::STATUS_ACTIVE]);
+    }
+
     public function setDefaultValues()
     {
         $this->loadDefaultValues();
