@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $uuid
  * @property int $pelanggan_id
+ * @property int $penggunaan_id
  * @property string $bulan
  * @property int $tahun
  * @property int $jumlah_meter
@@ -20,6 +21,7 @@ use Yii;
  * @property int $petugas_id
  *
  * @property Pelanggan $pelanggan
+ * @property Penggunaan $penggunaan
  * @property PembayaranDetail[] $pembayaranDetails
  * @property User $petugas
  */
@@ -42,13 +44,14 @@ class Tagihan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uuid', 'pelanggan_id', 'bulan', 'tahun', 'jumlah_meter', 'tarif_perkwh', 'total_bayar', 'data', 'petugas_id'], 'required'],
-            [['pelanggan_id', 'tahun', 'jumlah_meter', 'status', 'petugas_id'], 'integer'],
+            [['uuid', 'pelanggan_id', 'penggunaan_id', 'bulan', 'tahun', 'jumlah_meter', 'tarif_perkwh', 'total_bayar', 'data', 'petugas_id'], 'required'],
+            [['pelanggan_id', 'penggunaan_id', 'tahun', 'jumlah_meter', 'status', 'petugas_id'], 'integer'],
             [['tarif_perkwh', 'total_bayar'], 'number'],
             [['data'], 'string'],
             [['uuid'], 'string', 'max' => 36],
             [['bulan'], 'string', 'max' => 2],
             [['pelanggan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pelanggan::class, 'targetAttribute' => ['pelanggan_id' => 'id']],
+            [['penggunaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Penggunaan::class, 'targetAttribute' => ['penggunaan_id' => 'id']],
             [['petugas_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['petugas_id' => 'id']],
         ];
     }
@@ -62,6 +65,7 @@ class Tagihan extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'uuid' => Yii::t('app', 'Uuid'),
             'pelanggan_id' => Yii::t('app', 'Pelanggan'),
+            'penggunaan_id' => Yii::t('app', 'Penggunaan'),
             'bulan' => Yii::t('app', 'Bulan'),
             'tahun' => Yii::t('app', 'Tahun'),
             'jumlah_meter' => Yii::t('app', 'Jumlah Meter'),
@@ -81,6 +85,16 @@ class Tagihan extends \yii\db\ActiveRecord
     public function getPelanggan()
     {
         return $this->hasOne(Pelanggan::class, ['id' => 'pelanggan_id']);
+    }
+
+    /**
+     * Gets query for [[Penggunaan]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPenggunaan()
+    {
+        return $this->hasOne(Penggunaan::class, ['id' => 'penggunaan_id']);
     }
 
     /**

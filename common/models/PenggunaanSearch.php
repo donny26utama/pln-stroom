@@ -43,6 +43,7 @@ class PenggunaanSearch extends Penggunaan
         $query = Penggunaan::find();
 
         // add conditions that should always apply here
+        $query->where(['>', 'meter_akhir', 0]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

@@ -122,6 +122,7 @@ class Penggunaan extends \yii\db\ActiveRecord
             $model = new Tagihan();
             $model->uuid = Uuid::uuid4()->toString();
             $model->pelanggan_id = $this->pelanggan_id;
+            $model->penggunaan_id = $this->id;
             $model->bulan = $this->bulan;
             $model->tahun = $this->tahun;
             $model->jumlah_meter = $jumlah_meter;
@@ -161,7 +162,6 @@ class Penggunaan extends \yii\db\ActiveRecord
         $this->loadDefaultValues();
 
         if ($this->pelanggan_id) {
-            $pelanggan = $this->pelanggan;
             $this->periode = date('M Y', strtotime(sprintf('%s-%s-01', $this->tahun, $this->bulan)));
         }
     }

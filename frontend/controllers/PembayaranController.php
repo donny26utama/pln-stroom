@@ -2,11 +2,11 @@
 
 namespace frontend\controllers;
 
-use common\models\Agen;
 use common\models\Pelanggan;
 use common\models\Tagihan;
 use common\models\Pembayaran;
 use common\models\PembayaranSearch;
+use common\models\PembayaranDetail;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -75,7 +75,6 @@ class PembayaranController extends Controller
         $pelanggan = null;
         $tagihan = null;
         $filter = $this->request->queryParams;
-        $model->agen_id = Yii::$app->user->id;
         $model->setDefaultValues();
 
         if (isset($filter['search'])) {
@@ -87,12 +86,12 @@ class PembayaranController extends Controller
 
         if ($this->request->isPost) {
             $model->load($this->request->post());
+            $model->pelanggan_id = $pelanggan->id;
             $model->tempTagihan = $tagihan;
             $model->kembalian = $model->bayar - $model->total_bayar;
 
             if ($model->load($this->request->post()) && $model->save()) {
-                // return $this->redirect(['view', 'id' => $model->id]);
-                return $this->redirect(['index']);
+                return $this->redirect(['view', 'id' => $model->uuid]);
             }
         }
 
@@ -116,7 +115,7 @@ class PembayaranController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->uuid]);
         }
 
         return $this->render('update', [
@@ -138,6 +137,19 @@ class PembayaranController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionPrint($id)
+    {
+        if (($model = PembayaranDetail::findOne(['uuid' => $id])) !== null) {
+            $this->layout = 'blank';
+
+            return $this->render('print', [
+                'model' => $model,
+            ]);
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
     /**
      * Finds the Pembayaran model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -147,7 +159,7 @@ class PembayaranController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Pembayaran::findOne(['id' => $id])) !== null) {
+        if (($model = Pembayaran::findOne(['uuid' => $id])) !== null) {
             return $model;
         }
 
