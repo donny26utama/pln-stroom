@@ -5,6 +5,7 @@ use common\models\Pembayaran;
 use common\models\PembayaranDetail;
 use common\models\Tagihan;
 use common\models\User;
+use common\models\Pelanggan;
 
 /**
  * Handles the creation of table `{{%pembayaran}}`.
@@ -15,6 +16,7 @@ class m220126_074841_create_pembayaran_table extends Migration
     public $pembayaranDetailTableName;
     public $tagihanTableName;
     public $agenTableName;
+    public $pelangganTableName;
 
     public function init()
     {
@@ -24,6 +26,7 @@ class m220126_074841_create_pembayaran_table extends Migration
         $this->pembayaranDetailTableName = PembayaranDetail::tableName();
         $this->tagihanTableName = Tagihan::tableName();
         $this->agenTableName = User::tableName();
+        $this->pelangganTableName = Pelanggan::tableName();
     }
 
     /**
@@ -40,6 +43,8 @@ class m220126_074841_create_pembayaran_table extends Migration
         $this->createTable($this->pembayaranTableName, [
             'id' => $this->primaryKey(),
             'uuid' => $this->string(36)->notNull(),
+            'kode' => $this->string(15)->notNull(),
+            'pelanggan_id' => $this->integer()->notNull(),
             'tgl_bayar' => $this->datetime()->notNull(),
             'jumlah_tagihan' => $this->double()->notNull(),
             'biaya_admin' => $this->double()->notNull(),
@@ -49,6 +54,8 @@ class m220126_074841_create_pembayaran_table extends Migration
             'agen_id' => $this->integer()->notNull(),
         ], $tableOptions);
 
+        $this->createIndex('idx-pembayaran-pelanggan_id', $this->pembayaranTableName, 'pelanggan_id');
+        $this->addForeignKey('fk-pembayaran-pelanggan_id-to-pelanggan-id', $this->pembayaranTableName, 'pelanggan_id', $this->pelangganTableName, 'id');
         $this->createIndex('idx-pembayaran-agen_id', $this->pembayaranTableName, 'agen_id');
         $this->addForeignKey('fk-pembayaran-agen_id-to-user-id', $this->pembayaranTableName, 'agen_id', $this->agenTableName, 'id');
 
@@ -77,6 +84,8 @@ class m220126_074841_create_pembayaran_table extends Migration
         $this->dropIndex('idx-pembayaran_detil-pembayaran_id', $this->pembayaranDetailTableName);
         $this->dropForeignKey('fk-pembayaran-agen_id-to-user-id', $this->pembayaranTableName);
         $this->dropIndex('idx-pembayaran-agen_id', $this->pembayaranTableName);
+        $this->dropForeignKey('fk-pembayaran-pelanggan_id-to-pelanggan-id', $this->pembayaranTableName);
+        $this->dropIndex('idx-pembayaran-pelanggan_id', $this->pembayaranTableName);
         $this->dropTable($this->pembayaranDetailTableName);
         $this->dropTable($this->pembayaranTableName);
     }

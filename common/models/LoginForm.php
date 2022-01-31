@@ -10,6 +10,10 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
+    const SITE_PLN = 'pln';
+    const SITE_AGEN = 'agen';
+
+    public $site;
     public $username;
     public $password;
     public $rememberMe = true;
@@ -59,7 +63,7 @@ class LoginForm extends Model
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
-        
+
         return false;
     }
 
@@ -71,7 +75,11 @@ class LoginForm extends Model
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            if ($this->site === self::SITE_PLN) {
+                $this->_user = UserPetugas::findByUsername($this->username);
+            } else {
+                $this->_user = UserAgen::findByUsername($this->username);
+            }
         }
 
         return $this->_user;

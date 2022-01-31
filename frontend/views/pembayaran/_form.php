@@ -36,8 +36,10 @@ use yii\widgets\ActiveForm;
                     $row[] = '<td>'.$value->tarif_perkwh.'</td>';
                     $row[] = '<td>'.$value->total_bayar.'</td>';
                     $row[] = '</tr>';
+
                     $sum += $value->total_bayar;
                     $rows[] = implode("\n", $row);
+                    $model->biaya_admin += $model->fee;
                     $i++;
                 }
                 echo implode("\n", $rows);
