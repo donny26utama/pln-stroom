@@ -48,10 +48,6 @@ AppAsset::register($this);
                     ['label' => 'Riwayat Pembayaran', 'url' => ['/pembayaran/index']],
                 ],
             ],
-            [
-                'label' => 'Laporan',
-                'url' => ['/laporan/pembayaran'],
-            ],
         ];
         $rigthMenuItems[] = [
             'label' => 'Hi, ' . Yii::$app->user->identity->username,

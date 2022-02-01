@@ -26,8 +26,8 @@ return [
             'currencyCode' => 'Rp ',
             'nullDisplay' => '<em style="color:#d8d8d8">null</em>',
             'numberFormatterOptions' => [
-                NumberFormatter::MIN_FRACTION_DIGITS => 0,
-                NumberFormatter::MAX_FRACTION_DIGITS => 0,
+                \NumberFormatter::MIN_FRACTION_DIGITS => 0,
+                \NumberFormatter::MAX_FRACTION_DIGITS => 0,
             ],
         ],
         'stroom' => [
