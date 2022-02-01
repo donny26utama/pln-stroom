@@ -7,14 +7,14 @@ use common\models\Pembayaran;
 /* @var $this yii\web\View */
 /* @var $model common\models\Pembayaran */
 
-$this->title = $model->id;
+$this->title = sprintf('%s | Pembayaran', $model->kode);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pembayaran'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $model->kode;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="pembayaran-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>Informasi Pembayaran</h1>
 
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -33,7 +33,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'kode',
             [
                 'attribute' => 'pelanggan_id',
-                'title' => 'Nama Pelanggan'
+                'title' => 'Nama Pelanggan',
+                'value' => function ($data) {
+                    $pattern = 'ID PEL: %s | No. Meter: %s | Nama: %s | Tarif: %s';
+                    $pelanggan = $data->pelanggan;
+                    return sprintf($pattern, $pelanggan->kode, $pelanggan->no_meter, $pelanggan->nama, $pelanggan->tarif->kode);
+                }
             ],
             'tgl_bayar:date',
             'jumlah_tagihan:currency',

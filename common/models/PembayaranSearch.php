@@ -44,6 +44,7 @@ class PembayaranSearch extends Pembayaran
         $query = Pembayaran::find();
 
         // add conditions that should always apply here
+        $query->orderBy(['tgl_bayar' => SORT_ASC]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

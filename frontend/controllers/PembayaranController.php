@@ -11,6 +11,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 
 /**
  * PembayaranController implements the CRUD actions for Pembayaran model.
@@ -43,11 +44,13 @@ class PembayaranController extends Controller
     public function actionIndex()
     {
         $searchModel = new PembayaranSearch();
+        $searchModel->agen_id = Yii::$app->user->id;
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'queryParams' => $this->request->queryParams,
         ]);
     }
 
@@ -135,6 +138,57 @@ class PembayaranController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Export all Tarif data.
+     *
+     * @return string
+     */
+    public function actionExport()
+    {
+        $searchModel = new PembayaranSearch();
+        $searchModel->agen_id = Yii::$app->user->id;
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $data = $dataProvider->query->all();
+
+        $fileName = 'Laporan Pembayaran.xlsx';
+        $headers = WriterEntityFactory::createRowFromArray([
+            'ID Pembayaran',
+            'ID Pelanggan',
+            'Nama Pelanggan',
+            'Tanggal Pembayaran',
+            'Periode',
+            'Jumlah Bayar',
+            'Biaya Admin',
+            'Total Akhir',
+        ]);
+
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($fileName);
+        $writer->addRow($headers);
+
+        foreach ($data as $pembayaran) {
+            $pelanggan = $pembayaran->pelanggan;
+            foreach ($pembayaran->pembayaranDetails as $key => $detail) {
+                $tagihan = $detail->tagihan;
+                $totalAkhir = $tagihan->total_bayar + $detail->biaya_admin;
+                $periode = sprintf('%s-%s-01', $tagihan->tahun, $tagihan->bulan);
+                $row = WriterEntityFactory::createRowFromArray([
+                    $pembayaran->kode,
+                    $pelanggan->kode,
+                    $pelanggan->nama,
+                    $pembayaran->tgl_bayar,
+                    date('M Y', strtotime($periode)),
+                    $tagihan->total_bayar,
+                    $detail->biaya_admin,
+                    $totalAkhir,
+                ]);
+                $writer->addRow($row);
+            }
+        }
+
+        $writer->close();
     }
 
     public function actionPrint($id)

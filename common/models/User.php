@@ -7,6 +7,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use Ramsey\Uuid\Uuid;
 
 /**
  * User model
@@ -77,6 +78,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            [['uuid'], 'default', 'value' => Uuid::uuid4()->toString()],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
             ['role', 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_PETUGAS, self::ROLE_AGEN]],

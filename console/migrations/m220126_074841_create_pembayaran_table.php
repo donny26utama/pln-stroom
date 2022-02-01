@@ -65,6 +65,7 @@ class m220126_074841_create_pembayaran_table extends Migration
             'pembayaran_id' => $this->integer()->notNull(),
             'tagihan_id' => $this->integer()->notNull(),
             'denda' => $this->double()->notNull()->defaultValue(0),
+            'biaya_admin' => $this->double()->notNull()->defaultValue(0),
         ], $tableOptions);
 
         $this->createIndex('idx-pembayaran_detil-pembayaran_id', $this->pembayaranDetailTableName, 'pembayaran_id');
