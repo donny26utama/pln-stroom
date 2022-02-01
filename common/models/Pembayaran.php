@@ -67,7 +67,7 @@ class Pembayaran extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'uuid' => Yii::t('app', 'Uuid'),
-            'kode' => Yii::t('app', 'Kode'),
+            'kode' => Yii::t('app', 'ID Pembayaran'),
             'pelanggan_id' => Yii::t('app', 'Pelanggan'),
             'tgl_bayar' => Yii::t('app', 'Tgl Bayar'),
             'jumlah_tagihan' => Yii::t('app', 'Jumlah Tagihan'),

@@ -4,6 +4,7 @@ use yii\db\Migration;
 use common\models\Tagihan;
 use common\models\Pelanggan;
 use common\models\User;
+use common\models\Penggunaan;
 
 /**
  * Handles the creation of table `{{%tagihan}}`.
@@ -13,6 +14,7 @@ class m220126_073913_create_tagihan_table extends Migration
     public $tagihanTableName;
     public $pelangganTableName;
     public $petugasTableName;
+    public $penggunaanTableName;
 
     public function init()
     {
@@ -21,6 +23,7 @@ class m220126_073913_create_tagihan_table extends Migration
         $this->tagihanTableName = Tagihan::tableName();
         $this->pelangganTableName = Pelanggan::tableName();
         $this->petugasTableName = User::tableName();
+        $this->penggunaanTableName = Penggunaan::tableName();
     }
 
     /**
@@ -38,6 +41,7 @@ class m220126_073913_create_tagihan_table extends Migration
             'id' => $this->primaryKey(),
             'uuid' => $this->string(36)->notNull(),
             'pelanggan_id' => $this->integer()->notNull(),
+            'penggunaan_id' => $this->integer()->notNull(),
             'bulan' => $this->string(2)->notNull(),
             'tahun' => $this->integer(4)->notNull(),
             'jumlah_meter' => $this->integer()->notNull(),
@@ -49,8 +53,10 @@ class m220126_073913_create_tagihan_table extends Migration
         ], $tableOptions);
 
         $this->createIndex('idx-tagihan-pelanggan_id', $this->tagihanTableName, 'pelanggan_id');
+        $this->createIndex('idx-tagihan-penggunaan_id', $this->tagihanTableName, 'penggunaan_id');
         $this->createIndex('idx-tagihan-petugas_id', $this->tagihanTableName, 'petugas_id');
         $this->addForeignKey('fk-tagihan-pelanggan_id-to-pelanggan-id', $this->tagihanTableName, 'pelanggan_id', $this->pelangganTableName, 'id');
+        $this->addForeignKey('fk-tagihan-penggunaan_id-to-penggunaan-id', $this->tagihanTableName, 'penggunaan_id', $this->penggunaanTableName, 'id');
         $this->addForeignKey('fk-tagihan-petugas_id-to-user-id', $this->tagihanTableName, 'petugas_id', $this->petugasTableName, 'id');
     }
 
@@ -60,8 +66,10 @@ class m220126_073913_create_tagihan_table extends Migration
     public function safeDown()
     {
         $this->dropForeignKey('fk-tagihan-petugas_id-to-user-id', $this->tagihanTableName);
+        $this->dropForeignKey('fk-tagihan-penggunaan_id-to-penggunaan-id', $this->tagihanTableName);
         $this->dropForeignKey('fk-tagihan-pelanggan_id-to-pelanggan-id', $this->tagihanTableName);
         $this->dropIndex('idx-tagihan-petugas_id', $this->tagihanTableName);
+        $this->dropIndex('idx-tagihan-penggunaan_id', $this->tagihanTableName);
         $this->dropIndex('idx-tagihan-pelanggan_id', $this->tagihanTableName);
         $this->dropTable($this->tagihanTableName);
     }

@@ -19,6 +19,8 @@ return [
             // 'timeZone' => 'Asia/Jakarta',
             'defaultTimeZone' => 'Asia/Jakarta',
             'dateFormat' => 'php:j M Y',
+            'datetimeFormat' => 'php:d M Y H:i:s',
+            'timeFormat' => 'H:i:s',
             'decimalSeparator' => ',',
             'thousandSeparator' => '.',
             'currencyCode' => 'Rp ',
